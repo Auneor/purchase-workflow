@@ -62,34 +62,35 @@ class ProductProduct(models.Model):
             self._compute_process_qty_purchase()
         return res
 
-    @api.model
-    def search(self, args, offset=0, limit=None, order=None, count=False):
-        purchase = self.env["purchase.order"].browse(self.env.context.get("parent_id"))
+    # @api.model
+    # def search(self, args, offset=0, limit=None, order=None, count=False):
+    #     purchase = self.env["purchase.order"].browse(self.env.context.get("parent_id"))
+    #
+    #     in_current_parent_domain = []
+    #     for_current_supplier_domain = []
+    #
+    #     if self.env.context.get("in_current_parent") and purchase:
+    #         po_lines = self.env["purchase.order.line"].search(
+    #             [("order_id", "=", purchase.id)]
+    #         )
+    #         in_current_parent_domain.append(("id", "in", po_lines.mapped("product_id").ids))
+        # if self.env.context.get("for_current_supplier") and purchase:
+        #     seller = purchase.partner_id
+        #     seller = seller.commercial_partner_id or seller
+        #     for_current_supplier_domain += [
+        #         "|",
+        #         ("variant_specific_seller_ids.partner_id", "=", seller.id),
+        #         "&",
+        #         ("seller_ids.partner_id", "=", seller.id),
+        #         ("product_variant_ids", "!=", False),
+        #     ]
 
-        in_current_parent_domain = []
-        for_current_supplier_domain = []
-
-        if self.env.context.get("in_current_parent") and purchase:
-            po_lines = self.env["purchase.order.line"].search(
-                [("order_id", "=", purchase.id)]
-            )
-            in_current_parent_domain.append(("id", "in", po_lines.mapped("product_id").ids))
-        if self.env.context.get("for_current_supplier") and purchase:
-            seller = purchase.partner_id
-            seller = seller.commercial_partner_id or seller
-            for_current_supplier_domain += [
-                "|",
-                ("variant_specific_seller_ids.partner_id", "=", seller.id),
-                "&",
-                ("seller_ids.partner_id", "=", seller.id),
-                ("product_variant_ids", "!=", False),
-            ]
-
-        args += expression.OR([in_current_parent_domain, for_current_supplier_domain])
-
-        return super().search(
-            args, offset=offset, limit=limit, order=order, count=count
-        )
+        # if in_current_parent_domain or for_current_supplier_domain:
+        #     args += expression.OR([in_current_parent_domain, for_current_supplier_domain])
+        #
+        # return super().search(
+        #     args, offset=offset, limit=limit, order=order, count=count
+        # )
 
     @api.model
     def check_access_rights(self, operation, raise_exception=True):

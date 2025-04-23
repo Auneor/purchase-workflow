@@ -10,11 +10,11 @@
                     name="add_product"
                     string="Add from supplier's product list"
                     type="object"
+                    context="{'restrict_supplier_id': partner_id, 'use_only_supplied_product': use_only_supplied_product}"
                     attrs="{'invisible': [('state', 'not in', ('draft', 'sent'))]}"
                     class="oe_highlight"
                 />
             </field>
         </field>
     </record>
-
 </odoo>
